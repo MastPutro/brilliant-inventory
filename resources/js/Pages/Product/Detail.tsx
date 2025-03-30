@@ -7,6 +7,7 @@ import Button from "@/Components/Button";
 import { priceFormat, productIdFormat } from "@/utils/formats";
 import TextInput from "@/Components/TextInput";
 import Textarea from "@/Components/Textarea";
+import Barcode from "@/Components/Barcode";
 
 interface Product {
     id: number;
@@ -157,6 +158,26 @@ export default function Detail({
                             <p className="w-full text-lg text-gray-900">
                                 {product.category}
                             </p>
+                        </>
+                    )}
+                </div>
+
+                <div className="max-w-screen-sm">
+                    {isEdit ? (
+                        <TextInput
+                            label="Barcode"
+                            value={data.code}
+                            onChange={(e) => setData("code", e.target.value)}
+                            id="code"
+                            errorMsg={errors.code}
+                            required
+                        />
+                    ) : (
+                        <>
+                            <p className="block mb-1 text-sm font-medium text-gray-600">
+                                Barcode
+                            </p>
+                            <Barcode value={product.code} />
                         </>
                     )}
                 </div>

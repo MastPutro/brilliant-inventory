@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductUnitController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Session;
+use App\Http\Controllers\BarcodeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,7 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
+    
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('products', [ProductController::class, 'index'])->name('products.get');
     Route::post('products', [ProductController::class, 'store'])->name('products.add');

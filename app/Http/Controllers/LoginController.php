@@ -30,7 +30,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect('products');
+            return redirect('dashboard');
         }
 
         return redirect('/login')->with(['error' => 'Email atau kata sandi salah']);

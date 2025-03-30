@@ -6,6 +6,7 @@ import AuthLayout from "@/Layouts/AuthLayout";
 import TextInput from "@/Components/TextInput";
 import Button from "@/Components/Button";
 import Textarea from "@/Components/Textarea";
+import Barcode from "@/Components/Barcode";
 
 export default function New({
     auth,
@@ -56,17 +57,6 @@ export default function New({
                         type="number"
                         onChange={(e) => setData("price", e.target.value)}
                         errorMsg={errors.price}
-                        required
-                    />
-                </div>
-                <div className="max-w-screen-sm">
-                    <TextInput
-                        label="Stok"
-                        id="stock"
-                        value={data.stock}
-                        type="number"
-                        onChange={(e) => setData("stock", e.target.value)}
-                        errorMsg={errors.stock}
                         required
                     />
                 </div>

@@ -146,7 +146,8 @@ class ProductInController extends Controller
                 'name' => $detail->product->name,
                 'quantity' => $detail->quantity,
                 'price' => $detail->price,
-                'total_price' => $detail->total_price
+                'total_price' => $detail->total_price,
+                'code' => $detail->product->code,
             ];
             array_push($products, $data);
         }
