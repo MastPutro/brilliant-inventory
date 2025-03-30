@@ -9,11 +9,15 @@ interface DashboardProps extends PageProps {
     countitem: number;
     countin: number;
     countout: number;
+}
+interface ChartProps {
     earnings: number[];
     expenses: number[];
-}
+  }
+  
 
-export default function Index({ auth, flash, countitem, currentyear, countin, countout, earnings, expenses }: DashboardProps) {
+export default function Index({ auth, flash, ziggy, countitem, currentyear, countin, countout, earnings, expenses }: DashboardProps & ChartProps) {
+
     return (
         <AuthLayout user={auth.user}>
             <div className="container mx-auto p-6">
@@ -49,7 +53,8 @@ export default function Index({ auth, flash, countitem, currentyear, countin, co
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
                     <div className="lg:col-span-2 bg-white shadow-lg rounded-xl p-6">
                         <h3 className="text-lg font-semibold text-gray-700 mb-4">Ringkasan Barang Tahun {currentyear}</h3>
-                        <AreaChart earnings={earnings} expenses={expenses} />
+                        <AreaChart auth={auth} flash={flash} ziggy={ziggy} earnings={earnings} expenses={expenses} />
+
                     </div>
 
                     <div className="bg-white shadow-lg rounded-xl p-6">

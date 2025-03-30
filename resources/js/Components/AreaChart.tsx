@@ -50,6 +50,7 @@ interface ChartProps extends PageProps {
 }
 
 const AreaChart: React.FC<ChartProps> = ({ earnings, expenses }) => {
+
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
