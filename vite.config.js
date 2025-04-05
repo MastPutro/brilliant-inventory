@@ -15,6 +15,21 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
+import os from 'os';
+
+function getLocalExternalIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name] ?? []) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return 'localhost';
+}
+
+const localIP = getLocalExternalIP();
 
 export default defineConfig({
     plugins: [
@@ -25,12 +40,13 @@ export default defineConfig({
         react(),
     ],
     server: {
-        host: '0.0.0.0', // Pastikan bisa diakses dari perangkat lain
+        host: '0.0.0.0',
         port: 5173,
         strictPort: true,
+        cors: true,
         hmr: {
-            host: '192.168.100.3', // Ganti dengan IP lokal Anda
+            host: localIP,
         },
-        cors: true, // Tambahkan opsi CORS
     },
 });
+
