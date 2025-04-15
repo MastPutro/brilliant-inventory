@@ -31,7 +31,11 @@ class RegisterController extends Controller
             'password.min' => 'Kata sandi minimal 8 karakter',
         ]);
 
-        $shop = Shop::create();
+        // $shop = Shop::create();
+        $shop = Shop::create([
+            'name' => $request->name . "'s Shop", // atau bisa disesuaikan
+        ]);
+        
 
         User::create([
             'name' => $request->name,
