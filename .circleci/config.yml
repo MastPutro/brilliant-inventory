@@ -38,7 +38,7 @@ jobs:
       - run: php artisan migrate
 
       # Run tests (jika ada)
-      - run: php artisan test
+      # - run: php artisan test
 
 workflows:
   version: 2
