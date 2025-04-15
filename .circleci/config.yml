@@ -23,7 +23,7 @@ jobs:
 
       # Install dependencies
       - run: sudo apt-get update && sudo apt-get install -y unzip libzip-dev libpng-dev libonig-dev
-      - run: docker-php-ext-install pdo_mysql zip
+      - run: sudo docker-php-ext-install pdo_mysql zip
 
       # Setup composer
       - run: composer install -n --prefer-dist
