@@ -4,4 +4,5 @@
 `docker-compose up -d`
 ## Migrate Database
 `docker exec -it nama-container-app bash`
+
 `php artisan migrate`
