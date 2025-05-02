@@ -6,6 +6,7 @@ import {
     Logout,
     Person,
     Unarchive,
+    BrokenBox,
 } from "@/Components/Icons";
 import { User } from "@/types";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
@@ -178,6 +179,19 @@ export default function AuthLayout({
                             >
                                 <Unarchive className="w-5 h-5" />
                                 Barang Keluar
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href="/product-damaged"
+                                className={`flex items-center gap-2 py-2 px-5 rounded-md text-base font-medium ${
+                                    url.startsWith("/product-damaged")
+                                        ? "text-white bg-primary-500 hover:bg-primary-600"
+                                        : "text-gray-900 rounded hover:bg-primary-50"
+                                }`}
+                            >
+                                <BrokenBox className="w-5 h-5" />
+                                Barang Rusak
                             </Link>
                         </li>
                         <li>

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductInController;
 use App\Http\Controllers\ProductOutController;
 use App\Http\Controllers\ProductUnitController;
+use App\Http\Controllers\ProductDamageController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Session;
@@ -22,7 +23,15 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/barang-rusak', [ProductDamageController::class, 'index'])->name('product-damages.index');
+    Route::get('/product/{id}/entry-dates', [ProductDamageController::class, 'getEntryDates']);
+
+
+    Route::get('product-damaged', [ProductDamageController::class, 'index'])->name('product-damaged.get');
+    Route::get('/barang-rusak/create', [ProductDamageController::class, 'create'])->name('product-damages.create');
+    Route::post('/barang-rusak', [ProductDamageController::class, 'store'])->name('product-damages.store');
+
     Route::get('products', [ProductController::class, 'index'])->name('products.get');
     Route::post('products', [ProductController::class, 'store'])->name('products.add');
     Route::put('products/{id}', [ProductController::class, 'update'])->name('products.edit');

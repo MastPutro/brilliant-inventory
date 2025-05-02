@@ -83,6 +83,9 @@ class DashboardController extends Controller
             $monthName = Carbon::create()->month($item2->month)->format('F');
             $monthlyTotals2[$monthName] = $item2->total_price;
         }
+
+            // Ambil produk dengan stok rendah (≤ 5), bisa disesuaikan
+        $lowStockProducts = Product::where('stock', '<=', 5)->get(['id', 'name', 'stock']);
         
 
         return Inertia::render('Dashboard/Index', [
@@ -92,6 +95,7 @@ class DashboardController extends Controller
             'countout' => $countout,
             'earnings' => [$monthlyTotals['January'], $monthlyTotals['February'], $monthlyTotals['March'], $monthlyTotals['April'], $monthlyTotals['May'], $monthlyTotals['June'], $monthlyTotals['July'], $monthlyTotals['August'], $monthlyTotals['September'], $monthlyTotals['October'], $monthlyTotals['November'], $monthlyTotals['December']],
             'expenses' => [$monthlyTotals2['January'], $monthlyTotals2['February'], $monthlyTotals2['March'], $monthlyTotals2['April'], $monthlyTotals2['May'], $monthlyTotals2['June'], $monthlyTotals2['July'], $monthlyTotals2['August'], $monthlyTotals2['September'], $monthlyTotals2['October'], $monthlyTotals2['November'], $monthlyTotals2['December']],
+            'lowStockProducts' => $lowStockProducts, // Tambahkan ini
         ]);
     }
     

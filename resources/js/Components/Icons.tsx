@@ -133,3 +133,11 @@ export function Print({...props}: SVGAttributes<SVGElement>) {
         </svg>
     )
 }
+
+export function BrokenBox({ ...props }: SVGAttributes<SVGElement>) {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+            <path d="M200-120q-33 0-56.5-23.5T120-200v-499q0-14 4.5-27t13.5-24l50-61q11-14 27.5-21.5T250-840h460q18 0 34.5 7.5T772-811l50 61q9 11 13.5 24t4.5 27v499q0 33-23.5 56.5T760-120H200Zm280-320 60-60-80-80-60 60-80-80-40 40 80 80-60 60 40 40 60-60 80 80 40-40ZM200-640v440h560v-440H200Zm16-80h528l-34-40H250l-34 40Z"/>
+        </svg>
+    );
+}

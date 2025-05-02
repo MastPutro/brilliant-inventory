@@ -23,4 +23,8 @@ class ProductInDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function productIn()
+    {
+        return $this->belongsTo(ProductIn::class, 'product_in_id');
+    }
 }

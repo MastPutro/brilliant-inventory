@@ -52,6 +52,48 @@ class ProductController extends Controller
     }
 
 
+    // public function store(Request $request)
+    // {
+    //     $shop_id = Auth::user()->shop_id;
+
+    //     $validated = $request->validate([
+    //         'name' => ['required', 'string', 'unique:products,name,NULL,id,shop_id,'.$shop_id],
+    //         'price' => ['required', 'numeric', 'min:0'],
+    //         'code' => ['string', 'nullable', 'unique:products,code,NULL,id,shop_id,'.$shop_id],
+    //         'description' => ['string', 'nullable'],
+    //         'stock' => ['required', 'integer', 'min:0'],
+    //         'category' => ['required', 'string'],
+    //         'unit' => ['required', 'string']
+    //     ], [
+    //         'name.required' => 'Nama barang wajib diisi',
+    //         'name.unique' => 'Nama barang sudah ada',
+    //         'name.string' => 'Nama barang wajib berupa teks',
+    //         'price.required' => 'Harga wajib diisi',
+    //         'price.numeric' => 'Harga wajib berupa angka',
+    //         'price.min' => 'Harga minimal 0',
+    //         'code.unique' => 'Barcode barang sudah ada',
+    //         'stock.required' => 'Stok wajib diisi',
+    //         'stock.integer' => 'Stok harus berupa angka',
+    //         'stock.min' => 'Stok tidak boleh negatif',
+    //         'category.required' => 'Kategori wajib diisi', // Tambahkan pesan error kategori
+    //         'category.string' => 'Kategori harus berupa teks',
+    //         'unit.required' => 'Satuan wajib diisi', 
+    //         'unit.string' => 'Satuan harus berupa teks'
+    //     ]);
+
+    //     Product::create([
+    //         'name' => $request->name,
+    //         'code' => $request->code,
+    //         'shop_id' => $shop_id,
+    //         'price' => $request->price,
+    //         'description' => $request->description,
+    //         'stock' => $request->stock,
+    //         'category' => $request->category,
+    //         'unit' => $request->unit
+    //     ]);
+
+    //     return redirect('/products')->with('success', 'Berhasil menambah data barang');
+    // }
     public function store(Request $request)
     {
         $shop_id = Auth::user()->shop_id;
@@ -59,11 +101,11 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'unique:products,name,NULL,id,shop_id,'.$shop_id],
             'price' => ['required', 'numeric', 'min:0'],
-            'code' => ['string', 'nullable', 'unique:products,code,NULL,id,shop_id,'.$shop_id],
-            'description' => ['string', 'nullable'],
+            'code' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
             'stock' => ['required', 'integer', 'min:0'],
             'category' => ['required', 'string'],
-            'unit' => ['required', 'string']
+            'unit' => ['required', 'string'],
         ], [
             'name.required' => 'Nama barang wajib diisi',
             'name.unique' => 'Nama barang sudah ada',
@@ -71,19 +113,33 @@ class ProductController extends Controller
             'price.required' => 'Harga wajib diisi',
             'price.numeric' => 'Harga wajib berupa angka',
             'price.min' => 'Harga minimal 0',
-            'code.unique' => 'Barcode barang sudah ada',
             'stock.required' => 'Stok wajib diisi',
             'stock.integer' => 'Stok harus berupa angka',
             'stock.min' => 'Stok tidak boleh negatif',
-            'category.required' => 'Kategori wajib diisi', // Tambahkan pesan error kategori
+            'category.required' => 'Kategori wajib diisi',
             'category.string' => 'Kategori harus berupa teks',
-            'unit.required' => 'Satuan wajib diisi', 
-            'unit.string' => 'Satuan harus berupa teks'
+            'unit.required' => 'Satuan wajib diisi',
+            'unit.string' => 'Satuan harus berupa teks',
         ]);
+
+        // Generate barcode otomatis jika kosong
+        $code = $request->code;
+        if (!$code) {
+            do {
+                $code = strtoupper(uniqid()); // Contoh generate barcode unik
+                $codeExists = Product::where('shop_id', $shop_id)->where('code', $code)->exists();
+            } while ($codeExists);
+        } else {
+            // Pastikan barcode tidak duplikat
+            $codeExists = Product::where('shop_id', $shop_id)->where('code', $code)->exists();
+            if ($codeExists) {
+                return back()->withErrors(['code' => 'Barcode barang sudah ada'])->withInput();
+            }
+        }
 
         Product::create([
             'name' => $request->name,
-            'code' => $request->code,
+            'code' => $code,
             'shop_id' => $shop_id,
             'price' => $request->price,
             'description' => $request->description,
@@ -94,6 +150,7 @@ class ProductController extends Controller
 
         return redirect('/products')->with('success', 'Berhasil menambah data barang');
     }
+
 
     public function show(string $id)
     {

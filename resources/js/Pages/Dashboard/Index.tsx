@@ -1,14 +1,22 @@
 import Alert from "@/Components/Alert";
 import AreaChart from "@/Components/AreaChart";
-import { Box, Archive } from "@/Components/Icons";
+import { Box, Archive, Unarchive } from "@/Components/Icons";
 import AuthLayout from "@/Layouts/AuthLayout";
-import { PageProps } from "@/types";
+import { PageProps, TableHeader } from "@/types";
+import { productIdFormat } from "@/utils/formats";
+
+interface LowStockProduct {
+    id: number;
+    name: string;
+    stock: number;
+}
 
 interface DashboardProps extends PageProps {
     currentyear: number;
     countitem: number;
     countin: number;
     countout: number;
+    lowStockProducts: LowStockProduct[]; // <--- Tambahkan ini
 }
 interface ChartProps {
     earnings: number[];
@@ -16,7 +24,14 @@ interface ChartProps {
   }
   
 
-export default function Index({ auth, flash, ziggy, countitem, currentyear, countin, countout, earnings, expenses }: DashboardProps & ChartProps) {
+  export default function Index({ auth, flash, ziggy, countitem, currentyear, countin, countout, earnings, expenses, lowStockProducts }: DashboardProps & ChartProps) {
+
+
+    const tableHeader: TableHeader[] = [
+        { name: "id", label: "ID", sortable: true },
+        { name: "name", label: "Nama Barang", sortable: true },
+        { name: "stock", label: "Stok", sortable: true },
+    ];
 
     return (
         <AuthLayout user={auth.user}>
@@ -46,7 +61,7 @@ export default function Index({ auth, flash, ziggy, countitem, currentyear, coun
                             <h3 className="text-sm font-semibold text-gray-500">Barang Keluar</h3>
                             <p className="text-2xl font-bold text-gray-800">{countout}</p>
                         </div>
-                        <Archive className="w-10 h-10 text-gray-400" />
+                        <Unarchive className="w-10 h-10 text-gray-400" />
                     </div>
                 </div>
 
@@ -58,16 +73,36 @@ export default function Index({ auth, flash, ziggy, countitem, currentyear, coun
                     </div>
 
                     <div className="bg-white shadow-lg rounded-xl p-6">
-                        <h3 className="text-lg font-semibold text-gray-700 mb-4">Revenue Sources</h3>
-                        <div className="flex justify-center items-center h-40">
-                            <p className="text-gray-400">Chart Placeholder</p>
-                        </div>
-                        <div className="mt-4 text-center text-sm">
-                            <span className="mr-2 text-blue-500">● Direct</span>
-                            <span className="mr-2 text-green-500">● Social</span>
-                            <span className="text-yellow-500">● Referral</span>
-                        </div>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-4">Stok Hampir Habis</h3>
+                        
+                        {lowStockProducts.length === 0 ? (
+                            <p className="text-gray-500">Tidak ada barang dengan stok rendah.</p>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                                    <thead className="bg-gray-100">
+                                        <tr>
+                                            {tableHeader.map((header) => (
+                                                <th key={header.name} className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    {header.label}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {lowStockProducts.map((product) => (
+                                            <tr key={product.id}>
+                                                <td className="px-4 py-2">{productIdFormat(product.id)}</td>
+                                                <td className="px-4 py-2">{product.name}</td>
+                                                <td className="px-4 py-2">{product.stock}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
                     </div>
+
                 </div>
             </div>
         </AuthLayout>

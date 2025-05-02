@@ -8,6 +8,8 @@ import { dateFormat, priceFormat, productInIdFormat } from "@/utils/formats";
 import { Link } from "@inertiajs/react";
 import Barcode from "@/Components/Barcode"; 
 import ModalCode from "@/Components/ModalCode"; // Import Modal
+import BarcodeImage from "@/Components/BarcodeImage";
+
 import { useState, useRef } from "react";
 
 interface ProductIn {
@@ -92,30 +94,36 @@ export default function Detail({ auth, productIn, flash }: PageProps & {productI
             {/* MODAL BARCODE */}
             <ModalCode isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <div ref={printRef}>
-                    <h3 className="font-semibold text-lg">Barcode Produk</h3>
-                    <div className="grid grid-cols-3 gap-4 mt-4">
+                    <h3 className="font-semibold text-lg text-center">Barcode Produk</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
                         {productIn.products.map((product, index) => 
                             Array(product.quantity).fill(0).map((_, i) => (
-                                <div key={`${index}-${i}`} className="border p-4 rounded-md text-center">
+                                <div 
+                                    key={`${index}-${i}`} 
+                                    className="border p-4 rounded-md flex flex-col items-center text-center shadow-sm break-inside-avoid-page"
+                                >
                                     <p className="text-sm font-semibold mb-2">{product.name}</p>
-                                    <div className="flex">
-                                        <Barcode value={product.code}/>
-                                        <div className="w-30">
-                                            <p>{productInIdFormat(productIn.id)}</p>
+                                    <div className="flex flex-col items-center gap-2">
+                                        <BarcodeImage value={product.code} />
+                                        <p>{product.code}</p>
+                                        <div className="text-xs leading-tight mt-2">
+                                            <p>ID: {productInIdFormat(productIn.id)}</p>
                                             <p>{dateFormat(productIn.date)}</p>
                                         </div>
                                     </div>
+
                                 </div>
                             ))
                         )}
                     </div>
                 </div>
-                <div className="mt-4 flex justify-end">
+                <div className="mt-6 flex justify-end">
                     <Button type="button" icon={<Print className="w-5 h-5" />} onClick={handlePrint}>
                         Cetak
                     </Button>
                 </div>
             </ModalCode>
+
         </AuthLayout>
     );
 }
